@@ -4,10 +4,10 @@ import requests
 import webbrowser
 import warnings
 
+
 def __warning__(message):
     warnings.warn(category=Warning,
                   message=message)
-
 
 class W2Sms:
 
@@ -74,8 +74,7 @@ class W2Sms:
         webbrowser.open_new(str(self.location))
 
 
-
 if __name__ == '__main__':
     data = W2Sms(filename="w2sms.auth")
-    data.send_sms("Amishfsf", "9827904271")
+    data.send_sms("Amishfsf", "0123456789")
 
