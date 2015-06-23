@@ -1,10 +1,14 @@
 import unirest, sys
 
+"""
+Make a file named s2sms.auth containing following data, /// indicate start/end of file
+///
+Username Password Mashape-key
+///
 
-with open("s2sms.auth","r") as file:
-	uname = file.readline().strip("\n")
-	pwd = file.readline().strip("\n")
-    mashape_key = file.readline().strip("\n")
+"""
+with open("s2sms.auth","r") as files:
+    [uname, pwd, mashape_key] = files.readline().strip("\n").split()
 
 message = "Hello every one"
 
@@ -21,6 +25,6 @@ response = unirest.get(url,
 
 if str(response.code) == '200':
     print "Message sent successfully."
-else
+else:
     print "Some error occured"
 
