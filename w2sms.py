@@ -3,6 +3,7 @@ __author_ = "DarKnight"
 import requests
 import webbrowser
 import warnings
+import json
 
 
 def _warning(message):
@@ -51,16 +52,13 @@ class W2Sms:
 
         _data = {
             "ssaction" : "ss",
-            "Token" : self.headers["Cookie"][15:],
+            "Token" : self.headers["Cookie"][15:]+"z",
             "mobile" : number,
             "message" : message,
             "msgLen" : str(140-len(message))
         }
-        request = requests.post(self.base_url+"smstoss.action", data=_data, headers=self.headers)
-        if str(request.status_code) == '200':
-            print "Message sent successfully"
-        else:
-            _warning("Message not sent")
+        requests.post(self.base_url+"smstoss.action", data=_data, headers=self.headers, allow_redirects=False)
+
 
     def send_sms(self, message, number):
         if "Cookie" in self.headers:
@@ -81,25 +79,23 @@ class W2Sms:
         self.headers["X-Requested-With"] = "XMLHttpRequest"
         self.headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
         _data = {"Token" : self.headers["Cookie"][15:]}
-        request = requests.post(url, data=_data, headers=self.headers, allow_redirects=False)
-        print request.headers
-        print request.status_code
-        print request.text
+        return json.dumps(requests.post(url, data=_data, headers=self.headers, allow_redirects=False).text)
 
 
-    def add_contact(self, name, number, group_id=0):
+
+    def add_contact(self, name, number, group_id='0'):
         url = self.base_url+"addressbook"
         self.headers["Referer"] = self.base_url+"main.action?section=s&Token="+self.headers["Cookie"][15:]+"&vfType=register_verify"
         self.headers["X-Requested-With"] = "XMLHttpRequest"
         self.headers["Content-Type"] = "application/x-www-form-urlencoded; charset=UTF-8"
         _data = {
-            "action" : "addcontact",
-            "contno" : number,
-            "contname" : name,
-            "groupid" : group_id,
-            "Token" : self.headers["Cookie"][15:],
-            "ocontno" : "",
-            "ogroupid" : "",
+            "action": "addcontact",
+            "contno": number,
+            "contname": name,
+            "groupid": group_id,
+            "Token": self.headers["Cookie"][15:],
+            "ocontno": "",
+            "ogroupid": "",
         }
         request = requests.post(url, data=_data, headers=self.headers, allow_redirects=False)
         print request.headers
@@ -109,7 +105,7 @@ class W2Sms:
 
 if __name__ == '__main__':
     data = W2Sms(filename="w2sms.auth")
-    data.add_contact("test", "3652987456")
+    #data.add_contact("test", "3652987456")
     data.get_contacts()
-    # data.send_sms("Amishfsf", "0123456789")
+    #data.send_sms("Amishfsf", "9039943712")
 
